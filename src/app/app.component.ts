@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {v4 as uuidV4} from 'uuid';
-import {MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
+import {MatTabGroup} from '@angular/material/tabs';
 
 export interface Lesson {
   id: string;

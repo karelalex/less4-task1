@@ -22,17 +22,19 @@ export class LessonEditComponent implements OnChanges {
     if (!changes.lessonId) { return; }
     const currentLessonId = changes.lessonId.currentValue;
     if (changes.lessonId.previousValue !== currentLessonId) {
-      this.editRow(currentLessonId);
+      this.initForm(currentLessonId);
     }
   }
 
-  editRow = (id) => {
+  initForm = (id) => {
     if (id) {
       const lessonToEdit = this.lessons.find((item) => item.id === id);
-      this.editingLesson = {...lessonToEdit, date: moment(lessonToEdit.date).format('YYYY-MM-DD')};
-    } else {
-      this.editingLesson = {id: uuidV4()};
+      if (lessonToEdit) {
+        this.editingLesson = {...lessonToEdit, date: moment(lessonToEdit.date).format('YYYY-MM-DD')};
+        return;
+      }
     }
+    this.editingLesson = {id: uuidV4()};
   }
 
   afterEdit = () => {
@@ -44,16 +46,19 @@ export class LessonEditComponent implements OnChanges {
       this.lessons[index] = lessonToSave;
     }
     localStorage.setItem('lessonList', JSON.stringify(this.lessons.sort((a, b) => (a.date.getTime() - b.date.getTime()))));
+    this.initForm(null);
     this.finishEdit.emit();
   }
 
   cancelEdit = () => {
+    this.initForm(null);
     this.finishEdit.emit();
   }
 
   deleteLesson = (id) => {
     this.lessons = this.lessons.filter((item) => item.id !== id);
     localStorage.setItem('lessonList', JSON.stringify(this.lessons.sort((a, b) => (a.date.getTime() - b.date.getTime()))));
+    this.initForm(null);
     this.finishEdit.emit();
   }
 }
