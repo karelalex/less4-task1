@@ -24,16 +24,12 @@ export interface Student {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  title = 'less4-task1';
   @ViewChild('Tabs') tabs: MatTabGroup;
   tabIndex: number;
   editingLessonId: string;
   editingStudentId: string;
   students: Student[] = [];
-  lessons: Lesson[]  = [
-    {id: uuidV4(),  date: new Date(), theme: 'Как ангулярить', homework: 'сделать всё', notes: 'Было здорово'},
-    {id: uuidV4(),  date: new Date() , theme: 'Как ангулярить ещё лучше', homework: 'сделать опять всё', notes: 'Было ещё более здорово'},
-  ];
+  lessons: Lesson[]  = [];
 
   ngOnInit(): void {
    this.loadLessons();
@@ -51,7 +47,7 @@ export class AppComponent implements OnInit{
   }
 
   loadLessons(): void {
-    const recoveredLessons = JSON.parse(localStorage.getItem('lessonList'));
+    const recoveredLessons = JSON.parse(localStorage.getItem('lessonList')) || [];
     this.lessons = recoveredLessons.map((item) => {
       return {...item, date: new Date(item.date)};
     });
